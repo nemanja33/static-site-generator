@@ -52,10 +52,10 @@ def split_nodes_image(old_nodes):
     raise Exception("Empty list not allowed!")
   new_nodes = []
   for node in old_nodes:
-    extracted_images = extract_markdown_links(node.text)
+    extracted_images = extract_markdown_images(node.text)
     if len(extracted_images) == 0:
-      new_nodes.append(node)
-      return new_nodes
+      new_nodes.extend([node])
+      continue
     extracted_image = extracted_images[0]
     extracted_image_text = f"![{extracted_image[0]}]({extracted_image[1]})"
     if (extracted_image_text not in node.text):
@@ -63,11 +63,12 @@ def split_nodes_image(old_nodes):
       new_nodes.extend([node])
       continue
 
-    parted_array = list(filter(None, (node.text.split(extracted_image_text, 1))))
+    parted_array = list(filter(None, node.text.split(extracted_image_text, 1)))
     
     node_one = TextNode(parted_array[0], TextType.PLAIN)
     
     node_two = TextNode(extracted_image[0], TextType.IMAGE, extracted_image[1])
+    
     if len(parted_array) > 1:
       node_three = split_nodes_image([TextNode(parted_array[1], TextType.PLAIN)])
       new_nodes.extend([node_one, node_two])
@@ -86,8 +87,8 @@ def split_nodes_link(old_nodes):
   for node in old_nodes:
     extracted_links = extract_markdown_links(node.text)
     if len(extracted_links) == 0:
-      new_nodes.append(node)
-      return new_nodes
+      new_nodes.extend([node])
+      continue
     extracted_link = extracted_links[0]
     extracted_link_text = f"[{extracted_link[0]}]({extracted_link[1]})"
     if (extracted_link_text not in node.text):
@@ -95,7 +96,7 @@ def split_nodes_link(old_nodes):
       new_nodes.extend([node])
       continue
 
-    parted_array = list(filter(None, (node.text.split(extracted_link_text, 1))))
+    parted_array = list(filter(None, node.text.split(extracted_link_text, 1)))
     
     node_one = TextNode(parted_array[0], TextType.PLAIN)
     
@@ -106,5 +107,16 @@ def split_nodes_link(old_nodes):
       new_nodes.extend(node_three)
     else:
       new_nodes.extend([node_one, node_two])
-    
+
   return new_nodes
+
+def text_to_textnodes(text):
+  if (isinstance(text, str) == False):
+    raise Exception("Text needs to be a string!")
+  node = TextNode(text, TextType.PLAIN)
+  bold = split_nodes_delimiter([node], '**', TextType.BOLD)
+  italic = split_nodes_delimiter(bold, '_', TextType.ITALIC)
+  code = split_nodes_delimiter(italic, '`', TextType.CODE)
+  image = split_nodes_image(code)
+  link = split_nodes_link(image)
+  return link
