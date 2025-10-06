@@ -1,6 +1,6 @@
 import unittest
 from textnode import TextNode, TextType
-from converter import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
+from converter import split_nodes_delimiter, extract_markdown_links, split_nodes_link, text_to_textnodes
 
 class ConverterTest(unittest.TestCase):
   def test_plain_text(self):
@@ -86,20 +86,23 @@ class ConverterTest(unittest.TestCase):
     ])
     
   def test_extract_markdown_images(self):
-    matches = extract_markdown_images(
-        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+    matches = extract_markdown_links(
+        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)",
+        is_image=True
     )
     self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
     
   def test_extract_markdown_images_multi(self):
-    matches = extract_markdown_images(
-      "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and a flower ![flower](https://flower.jpg)"
+    matches = extract_markdown_links(
+      "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and a flower ![flower](https://flower.jpg)",
+      is_image=True
     )
     self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png"), ("flower", "https://flower.jpg")], matches)
     
   def test_extract_image_wrong_markdown(self):
-    matches = extract_markdown_images(
-        "This is text with an ![image(https://i.imgur.com/zjjcJKZ.png)"
+    matches = extract_markdown_links(
+        "This is text with an ![image(https://i.imgur.com/zjjcJKZ.png)",
+        is_image=True
     )
     self.assertListEqual([], matches)
 
@@ -158,7 +161,7 @@ class ConverterTest(unittest.TestCase):
     
   def test_extract_markdown_image(self):
     node = TextNode("This is text with an image ![flower](flower.jpg)", TextType.PLAIN)
-    converted = split_nodes_image([node])
+    converted = split_nodes_link([node], is_image=True)
     self.assertEqual(converted, [
       TextNode("This is text with an image ", TextType.PLAIN),
       TextNode("flower", TextType.IMAGE, "flower.jpg")
@@ -167,7 +170,7 @@ class ConverterTest(unittest.TestCase):
       
   def test_extract_markdown_images(self):
     node = TextNode("This is text with an image ![flower](flower.jpg) and an image of the ![sun](sun.jpg)", TextType.PLAIN)
-    converted = split_nodes_image([node])
+    converted = split_nodes_link([node], is_image=True)
     self.assertEqual(converted, [
       TextNode("This is text with an image ", TextType.PLAIN),
       TextNode("flower", TextType.IMAGE, "flower.jpg"),
@@ -176,12 +179,12 @@ class ConverterTest(unittest.TestCase):
 
   def test_empty_images(self):
     with self.assertRaises(Exception) as context:
-      split_nodes_image([])
+      split_nodes_link([], is_image=True)
     self.assertEqual(str(context.exception), "Empty list not allowed!")
     
   def test_non_list_images(self):
     with self.assertRaises(Exception) as context:
-      split_nodes_image(123)
+      split_nodes_link(123, is_image=True)
     self.assertEqual(str(context.exception), "Please submit an array of elements")
     
   def test_text_converter(self):
