@@ -1,6 +1,6 @@
 import unittest
 
-from markdown import markdown_to_blocks
+from markdown import markdown_to_blocks, markdown_to_html
 
 class TestTextNode(unittest.TestCase):
   def test_markdown_to_blocks(self):
@@ -18,8 +18,8 @@ class TestTextNode(unittest.TestCase):
         blocks,
         [
             "This is **bolded** paragraph",
-            "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
-            "- This is a list\n- with items",
+            "This is another paragraph with _italic_ text and `code` here This is the same paragraph on a new line",
+            "- This is a list - with items",
         ],
     )
 
@@ -37,7 +37,7 @@ class TestTextNode(unittest.TestCase):
 
     self.assertEqual(
       blocks,
-      ['1. First item ol\n2. Second item ol', '- First item ul\n- Second item ul', '* Just a heading']
+      ['1. First item ol 2. Second item ol', '- First item ul - Second item ul', '* Just a heading']
     )
 
   def test_a_lot_of_empty_lines(self):
@@ -62,5 +62,21 @@ class TestTextNode(unittest.TestCase):
       ['first line', 'second line after empty lines', 'third line']
     )
 
+  def test_paragraphs(self):
+    md = """
+      This is **bolded** paragraph
+      text in a p
+      tag here
+
+      This is another paragraph with _italic_ text and `code` here
+
+      """
+
+    node = markdown_to_html(md)
+    html = node.to_html()
+    self.assertEqual(
+        html,
+        "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+    )
 if __name__ == "__main__":
   unittest.main()
