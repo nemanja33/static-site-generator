@@ -2,12 +2,12 @@ from enum import Enum
 from htmlnode import LeafNode, ElementType
 
 class TextType(Enum):
-	PLAIN = "plain"
-	BOLD = "bold"
-	ITALIC = "italic"
+	PLAIN = "p"
+	BOLD = "b"
+	ITALIC = "i"
 	CODE = "code"
-	LINK = "link"
-	IMAGE = "image"
+	LINK = "a"
+	IMAGE = "img"
 
 class TextNode():
 	def __init__(self, text, type, url=None):
@@ -28,20 +28,20 @@ def text_node_to_html_node(text_node):
     raise(Exception, "Not correct type")
 
   if tag == TextType.PLAIN.value:
-    return LeafNode("", text_node.text)
+    return LeafNode(ElementType.PARAGRAPH.value, text_node.text)
   
   if tag == TextType.BOLD.value:
-    return LeafNode(ElementType.B.value, text_node.text)
+    return LeafNode(ElementType.BOLD.value, text_node.text)
     
   if tag == TextType.ITALIC.value:
-    return LeafNode(ElementType.I.value, text_node.text)
+    return LeafNode(ElementType.ITALIC.value, text_node.text)
     
   if tag == TextType.CODE.value:
     return LeafNode(ElementType.CODE.value, text_node.text)
     
   if tag == TextType.LINK.value:
-    return LeafNode(ElementType.A.value, text_node.text, { "href": text_node.url })
+    return LeafNode(ElementType.LINK.value, text_node.text, { "href": text_node.url })
     
   if tag == TextType.IMAGE.value:
-    return LeafNode(ElementType.IMG.value, text_node.text, { "src": text_node.url })
+    return LeafNode(ElementType.IMAGE.value, text_node.text, { "src": text_node.url })
   

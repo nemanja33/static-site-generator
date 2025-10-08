@@ -1,7 +1,7 @@
 from enum import Enum
 
 class ElementType(Enum):
-    P = "p"
+    PARAGRAPH = "p"
     SPAN = "span"
     H1 = "h1"
     H2 = "h2"
@@ -9,13 +9,13 @@ class ElementType(Enum):
     H4 = "h4"
     H5 = "h5"
     H6 = "h6"
-    B = "b"
-    I = "i"
-    A = "a"
-    IMG = "img"
-    UL = "ul"
-    OL = "ol"
-    LI = "li"
+    BOLD = "b"
+    ITALIC = "i"
+    LINK = "a"
+    IMAGE = "img"
+    UNORDERED_LIST = "ul"
+    ORDERED_LIST = "ol"
+    LIST_ITEM = "li"
     QUOTE = "blockquote"
     CODE = "code"
 
@@ -45,7 +45,7 @@ class LeafNode(HTMLNode):
     super().__init__(tag=tag, value=value, props=props)
       
   def to_html(self):
-    if self.tag == ElementType.IMG.value:
+    if self.tag == ElementType.IMAGE.value:
       return f'<{self.tag}{self.props_to_html()} alt="{self.value}" />'
     
     if self.tag is None:
@@ -69,7 +69,7 @@ class ParentNode(HTMLNode):
     
     final_tag = f"<{self.tag}{self.props_to_html()}>"
     for child in self.children:
-        final_tag += child.to_html()
+      final_tag += child.to_html()
     
     final_tag += f"</{self.tag}>"
     
