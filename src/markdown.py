@@ -8,8 +8,7 @@ def markdown_to_blocks(markdown):
   splitted_md = markdown.split("\n\n")
   remove_empty_el = list(filter(None, splitted_md))
   trimmed_md = [block.strip() for block in remove_empty_el if block.strip()]
-  removed_whitespace_inside_str = [re.sub(r'\n\s+', ' ', item) for item in trimmed_md]
-  return removed_whitespace_inside_str
+  return trimmed_md
 
 def text_to_leaf_node(text_nodes):
   children = []
@@ -28,11 +27,14 @@ def markdown_to_html(markdown):
   for block in blocks:
     type = block_to_block_type(block)
     if (type == BlockType.CODE):
-      text_node = TextNode(block, TextType.CODE)
+      remove_backticks = re.sub('```', '', block)
+      text_node = TextNode(f"{remove_backticks.lstrip()}", TextType.CODE)
       html_node = text_node_to_html_node(text_node)
-      html.append(html_node)
+      parent = ParentNode("pre", [html_node])
+      html.append(parent)
     else:
-      node = HTMLNode(type.value, block)
+      removed_whitespace_inside_str = re.sub(r'\n', ' ', block)
+      node = HTMLNode(type.value, removed_whitespace_inside_str)
       text_nodes = text_to_textnodes(node.value)
       leaf_nodes = text_to_leaf_node(text_nodes)
       html.append(leaf_nodes)
