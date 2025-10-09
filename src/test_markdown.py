@@ -92,5 +92,20 @@ the **same** even with inline stuff
         html,
         "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
     )
+
+  def test_limage(self):
+    md = """
+yo what's up with an image? ![image1](image.jpg)
+"""
+    node = markdown_to_html(md)
+    html = node.to_html()
+    self.assertEqual(
+      html,
+      "<div><p>yo what's up with an image? <img src=\"image.jpg\" alt=\"image1\" /></p></div>"
+    )
+
+
+  # ok liste nisam uradio XD
+
 if __name__ == "__main__":
   unittest.main()
