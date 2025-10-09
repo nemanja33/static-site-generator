@@ -1,10 +1,9 @@
 import re
 from blocknode import block_to_block_type, BlockType
-from htmlnode import HTMLNode, ParentNode
+from htmlnode import HTMLNode, ParentNode, ElementType, LeafNode
 from converter import text_to_textnodes
 from textnode import TextNode, TextType, text_node_to_html_node
 
-# ok something does not work here. the issue is that TextNodes are created for all parts of text and then multiple p tags are created
 def markdown_to_blocks(markdown):
   splitted_md = markdown.split("\n\n")
   remove_empty_el = list(filter(None, splitted_md))
@@ -12,14 +11,17 @@ def markdown_to_blocks(markdown):
   removed_whitespace_inside_str = [re.sub(r'\n\s+', ' ', item) for item in trimmed_md]
   return removed_whitespace_inside_str
 
-def text_to_children(text_nodes):
-  # bice malo kompleksnije
-  nodes = []
-  for node in text_nodes:
-    leaf_node = text_node_to_html_node(node)
-    # nodes.append(leaf_node)
-  return nodes
-
+def text_to_leaf_node(text_nodes):
+  children = []
+  for text in text_nodes:
+    if type(text) != str:
+      leaf_node = text_node_to_html_node(text)
+      children.append(leaf_node.to_html())
+    else:
+      children.append(text)
+  combined_text = ''.join(children)
+  return LeafNode(ElementType.PARAGRAPH.value, combined_text)
+  
 def markdown_to_html(markdown):
   blocks = markdown_to_blocks(markdown)
   html = []
@@ -31,18 +33,8 @@ def markdown_to_html(markdown):
       html.append(html_node)
     else:
       node = HTMLNode(type.value, block)
-      print(node)
       text_nodes = text_to_textnodes(node.value)
-      # leaf_nodes = text_to_children(text_nodes)
-      # html.extend(leaf_nodes)
-  # wrap = ParentNode("div", html)
-  # return wrap
-
-md = """
-      This is **bolded** paragraph
-      text in a p
-      tag here
-      """
-
-x = markdown_to_html(md)
-# print(x.to_html())
+      leaf_nodes = text_to_leaf_node(text_nodes)
+      html.append(leaf_nodes)
+  wrap = ParentNode("div", html)
+  return wrap

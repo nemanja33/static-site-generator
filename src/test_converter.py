@@ -191,15 +191,15 @@ class ConverterTest(unittest.TestCase):
     converted = text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
     self.assertEqual(converted,
       [
-        TextNode("This is ", TextType.PLAIN),
+        "This is ",
         TextNode("text", TextType.BOLD),
-        TextNode(" with an ", TextType.PLAIN),
+        " with an ",
         TextNode("italic", TextType.ITALIC),
-        TextNode(" word and a ", TextType.PLAIN),
+        " word and a ",
         TextNode("code block", TextType.CODE),
-        TextNode(" and an ", TextType.PLAIN),
+        " and an ",
         TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
-        TextNode(" and a ", TextType.PLAIN),
+        " and a ",
         TextNode("link", TextType.LINK, "https://boot.dev")
     ])
     
@@ -213,13 +213,13 @@ class ConverterTest(unittest.TestCase):
     converted = text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image(https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
     self.assertEqual(converted,
       [
-        TextNode("This is ", TextType.PLAIN),
+        "This is ",
         TextNode("text", TextType.BOLD),
-        TextNode(" with an ", TextType.PLAIN),
+        " with an ",
         TextNode("italic", TextType.ITALIC),
-        TextNode(" word and a ", TextType.PLAIN),
+        " word and a ",
         TextNode("code block", TextType.CODE),
-        TextNode(" and an ![obi wan image(https://i.imgur.com/fJRm4Vk.jpeg) and a ", TextType.PLAIN),
+        " and an ![obi wan image(https://i.imgur.com/fJRm4Vk.jpeg) and a ",
         TextNode("link", TextType.LINK, "https://boot.dev")
     ])
     
@@ -232,27 +232,27 @@ class ConverterTest(unittest.TestCase):
     converted = text_to_textnodes("Let's test multiple **bold**, _italic_, and `code` examples, but on multiple places, so here again: **another bold**, _another italic_, and `another code`. We should not forget about images or links: ![image 1](image1.jpg), [link 1](link1.com) and here is ![image 2](image2.jpg), [link 2](link2.com)!")
     
     self.assertEqual(converted, [
-      TextNode("Let's test multiple ", TextType.PLAIN),
+      "Let's test multiple ",
       TextNode("bold", TextType.BOLD),
-      TextNode(", ", TextType.PLAIN),
+      ", ",
       TextNode("italic", TextType.ITALIC),
-      TextNode(", and ", TextType.PLAIN),
+      ", and ",
       TextNode("code", TextType.CODE),
-      TextNode(" examples, but on multiple places, so here again: ", TextType.PLAIN),
+      " examples, but on multiple places, so here again: ",
       TextNode("another bold", TextType.BOLD),
-      TextNode(", ", TextType.PLAIN),
+      ", ",
       TextNode("another italic", TextType.ITALIC),
-      TextNode(", and ", TextType.PLAIN),
+      ", and ",
       TextNode("another code", TextType.CODE),
-      TextNode(". We should not forget about images or links: ", TextType.PLAIN),
+      ". We should not forget about images or links: ",
       TextNode("image 1", TextType.IMAGE, "image1.jpg"),
-      TextNode(", ", TextType.PLAIN),
+      ", ",
       TextNode("link 1", TextType.LINK, "link1.com"),
-      TextNode(" and here is ", TextType.PLAIN),
+      " and here is ",
       TextNode("image 2", TextType.IMAGE, "image2.jpg"),
-      TextNode(", ", TextType.PLAIN),
+      ", ",
       TextNode("link 2", TextType.LINK, "link2.com"),
-      TextNode("!", TextType.PLAIN)
+      "!"
     ])
 if __name__ == "__main__":
   unittest.main()

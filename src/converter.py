@@ -87,4 +87,10 @@ def text_to_textnodes(text):
   is_image = True
   image = split_nodes_link(code, is_image)
   link = split_nodes_link(image)
-  return link
+  final = []
+  for item in link:
+    if item.type == TextType.PLAIN:
+      final.append(item.text)
+    else:
+      final.append(item)
+  return final

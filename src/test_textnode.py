@@ -8,11 +8,6 @@ class TestTextNode(unittest.TestCase):
     node2 = TextNode("This is a text node", TextType.BOLD)
     self.assertEqual(node, node2)
     
-  def test_text(self):
-    node = TextNode("This is a text node", TextType.PLAIN)
-    html_node = text_node_to_html_node(node)
-    self.assertEqual(html_node.value, "This is a text node")
-
   def test_image(self):
     node = TextNode("Image alt", TextType.IMAGE, "./src/image.jpg")
     html_node = text_node_to_html_node(node)

@@ -22,14 +22,13 @@ class TextNode():
 		return f"TextNode({self.text}, {self.type.value}, {self.url})"
 
 def text_node_to_html_node(text_node):
+  if type(text_node) == str:
+    return LeafNode(ElementType.PARAGRAPH.value, text_node)
   tag = text_node.type.value
  
   if tag not in TextType:
     raise(Exception, "Not correct type")
 
-  if tag == TextType.PLAIN.value:
-    return LeafNode(ElementType.PARAGRAPH.value, text_node.text)
-  
   if tag == TextType.BOLD.value:
     return LeafNode(ElementType.BOLD.value, text_node.text)
     
