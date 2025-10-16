@@ -76,7 +76,7 @@ This is another paragraph with _italic_ text and `code` here
     html = node.to_html()
     self.assertEqual(
         html,
-        "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        "<div><p>This is <b>bolded</b> paragraph\ntext in a p\ntag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
     )
 
   def test_codeblock(self):
@@ -93,7 +93,7 @@ the **same** even with inline stuff
         "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
     )
 
-  def test_limage(self):
+  def test_li_image(self):
     md = """
 yo what's up with an image? ![image1](image.jpg)
 """
@@ -104,8 +104,70 @@ yo what's up with an image? ![image1](image.jpg)
       "<div><p>yo what's up with an image? <img src=\"image.jpg\" alt=\"image1\" /></p></div>"
     )
 
+  def test_unordered_list(self):
+    md = """
+** heading 2
 
-  # ok liste nisam uradio XD
+- First item ul
+- Second item ul
+- text
+
+just a paragraph
+"""
+    node = markdown_to_html(md)
+    html = node.to_html()
+    self.assertEqual(
+      html,
+      "<div><h2>heading 2</h2><ul><li>- First item ul</li><li>- Second item ul</li><li>- text</li></ul><p>just a paragraph</p></div>"
+    )
+
+  def test_ordered_list(self):
+    md = """
+** heading 2
+
+- First item ul
+- Second item ul
+- text
+
+1. ordered 1
+2. ordered 2
+
+just a paragraph
+"""
+    node = markdown_to_html(md)
+    html = node.to_html()
+    self.assertEqual(
+      html,
+      "<div><h2>heading 2</h2><ul><li>- First item ul</li><li>- Second item ul</li><li>- text</li></ul><ol><li>1. ordered 1</li><li>2. ordered 2</li></ol><p>just a paragraph</p></div>"
+    )
+
+
+  def test_a_lot_of_text(self):
+    md = """
+* Heading 1
+
+Lorem ipsum
+
+** Heading 2
+
+Lorem ipsum
+dolor
+
+- list item ![image1](image.jpg)
+
+lorem  porta lorem. Ut fr
+entesque habitant morbi tristique senectus et netus et
+malesuada fames ac turpis egestas. In in mollis quam. Interdum et malesuada fames ac ante ips
+
+***** Heading 5
+"""
+    node = markdown_to_html(md)
+    html = node.to_html()
+    self.assertEqual(
+      html,
+      "<div><h1>Heading 1</h1><p>Lorem ipsum</p><h2>Heading 2</h2><p>Lorem ipsum\ndolor</p><ul><li>- list item <img src=\"image.jpg\" alt=\"image1\" /></li></ul><p>lorem  porta lorem. Ut fr\nentesque habitant morbi tristique senectus et netus et\nmalesuada fames ac turpis egestas. In in mollis quam. Interdum et malesuada fames ac ante ips</p><h5>Heading 5</h5></div>"
+    )
+
 
 if __name__ == "__main__":
   unittest.main()

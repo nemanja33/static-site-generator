@@ -11,18 +11,18 @@ class BlockType(Enum):
 
 def block_to_block_type(block):
   if (block.startswith("```") and block.endswith("```")):
-    return BlockType.CODE
+    return BlockType.CODE, block
   if (block.startswith(">")):
-    return BlockType.QUOTE
-  heading_match = re.match(r'^#{1,6} ', block)
+    return BlockType.QUOTE, block
+  heading_match = re.match(r'^\*{1,6} ', block)
   if heading_match:
-    return BlockType.HEADING
+    return BlockType.HEADING, block
   list_block = block.split("\n")
   is_unorderd_list = all([block.startswith("- ") for block in list_block])
   if (is_unorderd_list):
-    return BlockType.UNORDERED_LIST
+    return BlockType.UNORDERED_LIST, list_block
   is_ordered_list = all([re.match(r'\d+. ', item) for item in list_block])
   if (is_ordered_list):
-    return BlockType.ORDERED_LIST
-  return BlockType.PARAGRAPH
+    return BlockType.ORDERED_LIST, list_block
+  return BlockType.PARAGRAPH, block
 

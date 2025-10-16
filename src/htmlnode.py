@@ -43,7 +43,10 @@ class HTMLNode:
 class LeafNode(HTMLNode):
   def __init__(self, tag, value=None, props=None):
     super().__init__(tag=tag, value=value, props=props)
-      
+    
+  def set_value(self, val):
+    self.tag = val
+
   def to_html(self):
     if self.tag == ElementType.IMAGE.value:
       return f'<{self.tag}{self.props_to_html()} alt="{self.value}" />'
@@ -53,7 +56,9 @@ class LeafNode(HTMLNode):
     
     if self.value is None:
       raise(ValueError)
-    
+    if (self.tag == ""):
+     return self.value
+
     return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
 class ParentNode(HTMLNode):
