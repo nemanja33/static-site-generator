@@ -1,6 +1,6 @@
 import re
 from blocknode import block_to_block_type, BlockType
-from htmlnode import HTMLNode, ParentNode, ElementType, LeafNode
+from htmlnode import HTMLNode, ParentNode, ElementType
 from converter import text_to_textnodes
 from textnode import TextNode, TextType, text_node_to_html_node
 
@@ -64,3 +64,10 @@ def markdown_to_html(markdown):
       html.append(leaf_nodes)
   wrap = ParentNode("div", html)
   return wrap
+
+def extract_title(markdown):
+  match = re.search(r'^# [^\n]+', markdown, re.MULTILINE)
+  if (match):
+    return match.group().split('# ')[1]
+  else:
+    raise Exception("No H1 present in file!")

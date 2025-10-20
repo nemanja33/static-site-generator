@@ -14,7 +14,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
       node = TextNode(node.text, node.type)
       new_nodes.extend([node])
       continue
-  
     delimiter_part_one = list(filter(None, node.text.split(delimiter, 1)))
     if (len(delimiter_part_one) < 2):
       node = TextNode(delimiter_part_one[0], TextType.PLAIN)
@@ -72,15 +71,15 @@ def split_nodes_link(old_nodes, is_image=False):
 
     parted_array = list(filter(None, node.text.split(extracted_link_text, 1)))
     
-    node_one = TextNode(parted_array[0], TextType.PLAIN)
     type = TextType.IMAGE if is_image else TextType.LINK
-    node_two = TextNode(extracted_link[0], type, extracted_link[1])
+    primary_node = TextNode(extracted_link[0], type, extracted_link[1])
     if len(parted_array) > 1:
+      secondary_node = TextNode(parted_array[0], TextType.PLAIN)
       node_three = split_nodes_link([TextNode(parted_array[1], TextType.PLAIN)], is_image)
-      new_nodes.extend([node_one, node_two])
+      new_nodes.extend([secondary_node, primary_node])
       new_nodes.extend(node_three)
     else:
-      new_nodes.extend([node_one, node_two])
+      new_nodes.extend([primary_node])
 
   return new_nodes
 
