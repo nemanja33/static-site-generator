@@ -16,7 +16,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
       continue
     delimiter_part_one = list(filter(None, node.text.split(delimiter, 1)))
     if (len(delimiter_part_one) < 2):
-      node = TextNode(delimiter_part_one[0], TextType.PLAIN)
+      node = TextNode(delimiter_part_one[0].replace(delimiter, ""), text_type)
       new_nodes.extend([node])
       continue
 
@@ -24,7 +24,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
       raise Exception("Invalid markdown!")
     
     delimeter_part_two = list(filter(None, delimiter_part_one[1].split(delimiter, 1)))
-    
     # nodes 
     node_one = TextNode(delimiter_part_one[0], TextType.PLAIN)
     node_two = TextNode(delimeter_part_two[0], text_type)
@@ -80,7 +79,6 @@ def split_nodes_link(old_nodes, is_image=False):
       new_nodes.extend(node_three)
     else:
       new_nodes.extend([primary_node])
-
   return new_nodes
 
 def text_to_textnodes(text):
