@@ -1,8 +1,8 @@
 import re
-from blocknode import block_to_block_type, BlockType
-from htmlnode import HTMLNode, ParentNode, ElementType
-from converter import text_to_textnodes
-from textnode import TextNode, TextType, text_node_to_html_node
+from convert.blocknode import block_to_block_type, BlockType
+from convert.htmlnode import HTMLNode, ParentNode, ElementType
+from convert.converter import text_to_textnodes
+from convert.textnode import TextNode, TextType, text_node_to_html_node
 
 def markdown_to_blocks(markdown):
   splitted_md = markdown.split("\n\n")

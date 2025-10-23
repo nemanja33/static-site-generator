@@ -1,5 +1,5 @@
 from enum import Enum
-from htmlnode import LeafNode, ElementType
+from convert.htmlnode import LeafNode, ElementType
 
 class TextType(Enum):
 	PLAIN = "p"

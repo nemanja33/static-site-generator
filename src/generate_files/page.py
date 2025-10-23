@@ -1,5 +1,5 @@
 import os
-from markdown import markdown_to_html, extract_title
+from convert.markdown import markdown_to_html, extract_title
 
 def copy_index(start_dir, template_path, dest_path):
   md = open(f"{start_dir}/index.md").read()

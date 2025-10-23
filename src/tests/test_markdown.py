@@ -1,6 +1,6 @@
 import unittest
 
-from markdown import markdown_to_blocks, markdown_to_html, extract_title
+from convert.markdown import markdown_to_blocks, markdown_to_html, extract_title
 
 class TestTextNode(unittest.TestCase):
   def test_markdown_to_blocks(self):
@@ -118,7 +118,7 @@ just a paragraph
     html = node.to_html()
     self.assertEqual(
       html,
-      "<div><h2>heading 2</h2><ul><li>- First item ul</li><li>- Second item ul</li><li>- text</li></ul><p>just a paragraph</p></div>"
+      "<div><h2>heading 2</h2><ul><li>First item ul</li><li>Second item ul</li><li>text</li></ul><p>just a paragraph</p></div>"
     )
 
   def test_ordered_list(self):
@@ -138,7 +138,7 @@ just a paragraph
     html = node.to_html()
     self.assertEqual(
       html,
-      "<div><h2>heading 2</h2><ul><li>- First item ul</li><li>- Second item ul</li><li>- text</li></ul><ol><li>1. ordered 1</li><li>2. ordered 2</li></ol><p>just a paragraph</p></div>"
+      "<div><h2>heading 2</h2><ul><li>First item ul</li><li>Second item ul</li><li>text</li></ul><ol><li>ordered 1</li><li>ordered 2</li></ol><p>just a paragraph</p></div>"
     )
 
 
@@ -165,7 +165,7 @@ malesuada fames ac turpis egestas. In in mollis quam. Interdum et malesuada fame
     html = node.to_html()
     self.assertEqual(
       html,
-      "<div><h1>Heading 1</h1><p>Lorem ipsum</p><h2>Heading 2</h2><p>Lorem ipsum\ndolor</p><ul><li>- list item <img src=\"image.jpg\" alt=\"image1\" /></li></ul><p>lorem  porta lorem. Ut fr\nentesque habitant morbi tristique senectus et netus et\nmalesuada fames ac turpis egestas. In in mollis quam. Interdum et malesuada fames ac ante ips</p><h5>Heading 5</h5></div>"
+      "<div><h1>Heading 1</h1><p>Lorem ipsum</p><h2>Heading 2</h2><p>Lorem ipsum\ndolor</p><ul><li>list item <img src=\"image.jpg\" alt=\"image1\" /></li></ul><p>lorem  porta lorem. Ut fr\nentesque habitant morbi tristique senectus et netus et\nmalesuada fames ac turpis egestas. In in mollis quam. Interdum et malesuada fames ac ante ips</p><h5>Heading 5</h5></div>"
     )
 
   def test_title_no_heading(self):
