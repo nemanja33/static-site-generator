@@ -33,3 +33,4 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
     sub_content_path = f"{dir_path_content}/{directory}"
     sub_dest_path = f"{dest_dir_path}/{directory}"
     generate_pages_recursive(sub_content_path, template_path, sub_dest_path, basepath)
+    
